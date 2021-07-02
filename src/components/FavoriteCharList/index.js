@@ -12,24 +12,26 @@ import Favorite from '@material-ui/icons/Favorite';
 
 import Pagination from '@material-ui/core/Pagination';
 
-export default function CharList({ search, favorites, handleFavorite }) {
-  const [CharacterList, GetCharacterList] = useState([]);
+export default function FavoriteCharList({
+  search,
+  favorites,
+  handleFavorite,
+}) {
+  const [favoritesList, setFavoritesList] = useState([]);
   const [pages, setPages] = useState();
   const [selectedPage, setSelectedPage] = useState(1);
 
   useEffect(() => {
     axios
-      .get(
-        `https://rickandmortyapi.com/api/character/?page=${selectedPage}&name=${search}`
-      )
+      .get(`https://rickandmortyapi.com/api/character/${favorites}`)
+
       .then((response) => {
-        GetCharacterList(response.data.results);
-        setPages(response.data.info.pages);
+        setFavoritesList(response.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [search, selectedPage]);
+  }, [search, selectedPage, favorites]);
 
   const handlePage = (e) => {
     setSelectedPage(e);
@@ -38,38 +40,37 @@ export default function CharList({ search, favorites, handleFavorite }) {
   return (
     <Container>
       <CardWrapper>
-        {CharacterList.map((char, id) => {
-          console.log();
-
-          return (
-            <StyledCard sx={{ width: 345 }} key={id}>
-              <CardMedia
-                sx={{ height: 300 }}
-                image={char.image}
-                title={char.name}
-              />
-              <CardContent>
-                <TitleWrapper>
-                  <Typography variant="h5">{char.name}</Typography>
-                  <StyledCheckbox
-                    size="medium"
-                    checked={favorites.includes(char.id)}
-                    icon={<FavoriteBorder />}
-                    checkedIcon={<StyledFavorite />}
-                    value={char.id}
-                    onChange={(e) => handleFavorite(e)}
-                  />
-                </TitleWrapper>
-                <Typography variant="body2" color="text.secondary">
-                  Origin: {char.origin.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Gender: {char.gender}
-                </Typography>
-              </CardContent>
-            </StyledCard>
-          );
-        })}
+        {favoritesList &&
+          favoritesList.map((char, id) => {
+            return (
+              <StyledCard sx={{ width: 345 }} key={id}>
+                <CardMedia
+                  sx={{ height: 300 }}
+                  image={char.image}
+                  title={char.name}
+                />
+                <CardContent>
+                  <TitleWrapper>
+                    <Typography variant="h5">{char.name}</Typography>
+                    <StyledCheckbox
+                      size="medium"
+                      checked={favorites.includes(char.id)}
+                      icon={<FavoriteBorder />}
+                      checkedIcon={<StyledFavorite />}
+                      value={char.id}
+                      onChange={(e) => handleFavorite(e)}
+                    />
+                  </TitleWrapper>
+                  <Typography variant="body2" color="text.secondary">
+                    Origin: {char.origin.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Gender: {char.gender}
+                  </Typography>
+                </CardContent>
+              </StyledCard>
+            );
+          })}
       </CardWrapper>
       <StyledPagination
         count={pages}
