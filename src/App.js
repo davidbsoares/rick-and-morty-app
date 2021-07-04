@@ -108,7 +108,6 @@ function App() {
       .get(`https://rickandmortyapi.com/api/character/${favorites}`)
 
       .then((response) => {
-        console.log(response);
         setFavoritesList(response.data);
       })
       .catch((err) => {
@@ -190,15 +189,25 @@ const Container = styled.div`
 const Section = styled.div`
   margin: ${({ margin }) => margin && `${margin}`};
   width: 40vw;
+
+  @media screen and (max-width: 1024px) {
+    width: 60vw;
+  }
 `;
 
 const Image = styled.img`
   width: 640px;
   height: 272px;
+
+  @media screen and (max-width: 768px) {
+    width: 70%;
+    height: auto;
+    margin-bottom: -30px;
+  }
 `;
 
 const StyledTabs = styled(Tabs)`
-  .Mui-selected {
+  && .Mui-selected {
     color: #97ce4c;
   }
   .MuiTabs-indicator {
