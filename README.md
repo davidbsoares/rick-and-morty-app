@@ -9,8 +9,7 @@
 
 ## 🖥 Preview 
   
-  ![](/public/preview.png)
-  
+  ![](/public/preview.png) 
 
 
 ---
@@ -18,6 +17,8 @@
 ## 📖 Sobre 
 
 Projeto desenvolvido em React com base na [API do Rick and Morty](https://rickandmortyapi.com/). Nele você pode fazer uma busca dos 671 personagens do desenho e selecionar os seus favoritos.
+
+[Demo aqui](https://rickandmorty-davidbsoares.netlify.app/)
 
 --- 
 
