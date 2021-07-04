@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import TextField from '@material-ui/core/TextField';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import SwipeableViews from 'react-swipeable-views';
 import { createTheme } from '@material-ui/core/styles';
+import SwipeableViews from 'react-swipeable-views';
+
+import ReactLoading from 'react-loading';
 
 import CharList from './components/CharList';
 import FavoriteCharList from './components/FavoriteCharList';
@@ -35,6 +38,22 @@ function App() {
 
   const token = JSON.parse(localStorage.getItem('Favorites'));
   const [favorites, setFavorites] = useState(token ? token : []);
+  const [favoritesList, setFavoritesList] = useState([]);
+  const [characterList, getCharacterList] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const [pages, setPages] = useState();
+  const [selectedPage, setSelectedPage] = useState(1);
+
+  const handleLoading = (e) => {
+    setLoading(e);
+  };
+
+  const handlePage = (e) => {
+    getCharacterList([]);
+    setSelectedPage(e);
+  };
 
   const removeItem = (index) => {
     var newFavorites = favorites;
@@ -45,7 +64,6 @@ function App() {
   const handleFavorite = (e) => {
     const checked = e.target.checked;
     const value = parseInt(e.target.value);
-
     const index = favorites.indexOf(value);
 
     if (checked && !favorites.includes(value)) {
@@ -71,12 +89,45 @@ function App() {
     localStorage.setItem('Favorites', JSON.stringify(favorites));
   }, [favorites]);
 
+  useEffect(() => {
+    axios
+      .get(
+        `https://rickandmortyapi.com/api/character/?page=${selectedPage}&name=${search}`
+      )
+      .then((response) => {
+        getCharacterList(response.data.results);
+        setPages(response.data.info.pages);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [search, selectedPage]);
+
+  useEffect(() => {
+    axios
+      .get(`https://rickandmortyapi.com/api/character/${favorites}`)
+
+      .then((response) => {
+        console.log(response);
+        setFavoritesList(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [favorites]);
+
+  useEffect(() => {
+    if (characterList.length === 0) {
+      handleLoading(true);
+    } else {
+      handleLoading(false);
+    }
+  }, [characterList]);
+
   return (
     <Container>
       <Image src={Logo} />
-      <button onClick={() => localStorage.removeItem('Favorites')}>
-        Clear
-      </button>
+
       <Section margin="5rem 0 1rem">
         <TextField
           id="search"
@@ -88,27 +139,40 @@ function App() {
         />
       </Section>
 
-      <Tabs value={value} onChange={handleChange} centered>
+      <StyledTabs value={value} onChange={handleChange} centered>
         <Tab label="Multiverse" />
         <Tab label="Favorites" />
-      </Tabs>
+      </StyledTabs>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0}>
-          <CharList
-            search={search}
-            favorites={favorites}
-            handleFavorite={handleFavorite}
-          />
+          {loading ? (
+            <StyledReactLoading
+              type="spinningBubbles"
+              color="#97ce4c"
+              height={100}
+              width={100}
+            />
+          ) : (
+            <CharList
+              search={search}
+              favorites={favorites}
+              handleFavorite={handleFavorite}
+              pages={pages}
+              handlePage={handlePage}
+              characterList={characterList}
+            />
+          )}
         </TabPanel>
         <TabPanel value={value} index={1}>
           <FavoriteCharList
             search={search}
             favorites={favorites}
             handleFavorite={handleFavorite}
+            favoritesList={favoritesList}
           />
         </TabPanel>
       </SwipeableViews>
@@ -131,6 +195,19 @@ const Section = styled.div`
 const Image = styled.img`
   width: 640px;
   height: 272px;
+`;
+
+const StyledTabs = styled(Tabs)`
+  .Mui-selected {
+    color: #97ce4c;
+  }
+  .MuiTabs-indicator {
+    background-color: #97ce4c;
+  }
+`;
+
+const StyledReactLoading = styled(ReactLoading)`
+  margin-top: 100px;
 `;
 
 export default App;
