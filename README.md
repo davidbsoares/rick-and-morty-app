@@ -1,8 +1,8 @@
 ## 📋 Índice
 
-- [Sobre](#-Sobre)
-- [Tecnologias utilizadas](#-Tecnologias-utilizadas)
-- [Como executar o projeto](#-Como-executar-o-projeto)
+- [About](#-About)
+- [Tech used](#-Tech-used)
+- [How to exectue the project](#-How-to-exectue-the-project)
 - [Preview](#-Preview)
 
 ---
@@ -14,48 +14,48 @@
 
 ---
 
-## 📖 Sobre 
+## 📖 About 
 
-Projeto desenvolvido em React com base na [API do Rick and Morty](https://rickandmortyapi.com/). Nele você pode fazer uma busca dos 671 personagens do desenho e selecionar os seus favoritos.
+A React webite developed based on [Rick and Morty's API](https://rickandmortyapi.com/). You can search the 671 characters and select your favorites.
 
 [Demo aqui](https://rickandmorty-davidbsoares.netlify.app/)
 
 --- 
 
-## 🚀 Tecnologias utilizadas
+## 🚀 Tech used
 
-O projeto está desenvolvido utilizando as seguintes tecnologias:
-
+The project was developed with the following techs:
 
 - JavaScript
 - React
-- axios
+- Axios
 - Material-UI
-- React-DOM
 - Styled-components
 
 
 --- 
 
-## ⌨ Como executar o projeto
+## ⌨ How to execute the project
+
+You can access https://rickandmorty-davidbsoares.netlify.app/ or execute in your computer.
 
 ```bash
-# Clonar o repositório
+# Clone the repository
 git clone https://github.com/davidbsoares/rick-and-morty-app
 
-# Entrar no diretório
+# Enter the repository folder
 cd rick-and-morty-app
 
-# Baixar as dependências
+# Download dependencies
 npm i
 
-# Executar o servidor
+# Execute the server
 npm start
 ```
 
-Feito isso, abra o seu navegador e acesse `http://localhost:3000/`
+Then, open your browser and access `http://localhost:3000/`
 
 ---
 
 
-Desenvolvido com 💜 por David Brum Soares
+Developed with 💜 by David Brum Soares
